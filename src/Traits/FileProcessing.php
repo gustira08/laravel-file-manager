@@ -11,6 +11,9 @@ use Koderak\FileManager\Enums\FileCategory;
 
 trait FileProcessing
 {
+    /**
+     * Upload file to storage disk
+     */
     public function upload(File|UploadedFile|string $file): array|false
     {
         $mimeType = $file->getMimeType();
@@ -41,6 +44,9 @@ trait FileProcessing
         return false;
     }
 
+    /**
+     * Delete file from storage disk
+     */
     public function deleteFile(string|array $paths): bool
     {
         return $this->storage()->delete($paths);
@@ -90,20 +96,24 @@ trait FileProcessing
         return false;
     }
 
+    /**
+     * Get file category by mime type
+     */
     public function category(string $mimeType) : FileCategory
     {
         return FileCategory::findCategory($mimeType);
     }
 
-    public function isAllowedMediaType(string $mimeType) : bool
-    {
-        if (in_array($mimeType, $this->allowedMediaType)) {
-            return true;
-        }
-
-        return false;
-    }
-
+    /**
+     * Check whether file is exists or not on the given path of the storage
+     * directory.
+     *
+     * NOTE: It's usefull when we need to move the file to new location
+     * to prevent the old file has replaced by new file if the file
+     * has the same filename.
+     *
+     * @return bool
+     */
     public function isFileExists(string $path): bool
     {
         if ($this->storage()->exists($path)) {
@@ -113,13 +123,25 @@ trait FileProcessing
         return false;
     }
 
-    public function generateThumbnail(string $path = null): array
+    // public function generateThumbnail(string $path = null): array
+    // {
+    //     // $this->imageService->generateImage($this->filename);
+    //     return [];
+    // }
+
+
+    /**
+     * Check if mime type of uploaded file is allowed to
+     * be upload to storage disk.
+     */
+    protected function isAllowedMediaType(string $mimeType) : bool
     {
-        // $this->imageService->generateImage($this->filename);
-        return [];
+        if (in_array($mimeType, $this->allowedMediaType)) {
+            return true;
+        }
+
+        return false;
     }
-
-
 
     protected function hash(string $path = null, string $algo = 'sha1') : string|false
     {

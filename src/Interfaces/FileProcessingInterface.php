@@ -43,23 +43,23 @@ interface FileProcessingInterface
     public function category(string $mimeType);
 
     /**
-     * Check the file is allowed to upload or not
-     *
-     * @return bool
-     */
-    public function isAllowedMediaType(string $mimeType);
-
-    /**
-     * Generate thumbnail for given file path
-     *
-     * @return array
-     */
-    public function generateThumbnail(string $path);
-
-    /**
      * Check file is exists on the storage disk
      *
      * @return bool
      */
     public function isFileExists(string $path);
+
+    // /**
+    //  * Check the file is allowed to upload or not
+    //  *
+    //  * @return bool
+    //  */
+    // public function isAllowedMediaType(string $mimeType);
+
+    // /**
+    //  * Generate thumbnail for given file path
+    //  *
+    //  * @return array
+    //  */
+    // public function generateThumbnail(string $path);
 }
