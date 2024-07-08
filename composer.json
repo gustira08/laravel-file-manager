@@ -9,7 +9,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Koderak\\FileManager\\Test\\": "tests/"
+            "Koderak\\FileManager\\Test\\": "tests/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "authors": [

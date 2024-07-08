@@ -3,6 +3,7 @@
 namespace Koderak\FileManager;
 
 use Illuminate\Support\ServiceProvider;
+use Koderak\FileManager\Console\Commands\Install;
 
 class FileManagerServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,10 @@ class FileManagerServiceProvider extends ServiceProvider
     public function boot() {
         $this->publishes([
             __DIR__ . '/../config/filemanager.php' => config_path('filemanager.php'),
-        ], 'koderak-laravel-file-manager');
+        ], 'filemanager-config');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([Install::class]);
+        }
     }
 }
