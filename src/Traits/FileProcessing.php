@@ -26,6 +26,13 @@ trait FileProcessing
             $this->category = $this->category($mimeType);
             $this->filename = $this->uploadToDisk($file, $uploadedFilename);
 
+            $thumb = [];
+            if ($this->category === FileCategory::IMAGE) {
+                foreach ($this->thumbSizes as $thumbSize) {
+                    $thumb[] = $this->generateThumbnail($thumbSize);
+                }
+            }
+
             return [
                 'name' => $uploadedFilename,
                 'path' => $this->filename,
@@ -35,7 +42,7 @@ trait FileProcessing
                 'size' => $this->storage()->size($this->filename),
                 'mime_type' => $mimeType,
                 'sha1sum' => $this->hash(),
-                'meta' => [],
+                'meta' => ['thumbnails' => $thumb],
             ];
         } else {
             throw new Exception(__('File type is not allowed.'), 422);
@@ -123,11 +130,29 @@ trait FileProcessing
         return false;
     }
 
-    // public function generateThumbnail(string $path = null): array
-    // {
-    //     // $this->imageService->generateImage($this->filename);
-    //     return [];
-    // }
+    protected function generateThumbnail(array $option = []): string
+    {
+        $thumbOption = [
+            'path' => $this->filename,
+            'filter' => 'crop',
+            'size' => '300x300',
+            'prefix' => 'thumbs',
+            'suffix' => '300x300',
+        ];
+
+        foreach ($thumbOption as $key => $value) {
+            if (Arr::exists($option, $key)) {
+                $thumbOption[$key] = $option[$key];
+            }
+        }
+
+        return $this->imageService->save(
+            $thumbOption['path'],
+            [$thumbOption['filter'] => $thumbOption['size']],
+            prefix: $thumbOption['prefix'],
+            suffix: $thumbOption['suffix']
+        );
+    }
 
 
     /**

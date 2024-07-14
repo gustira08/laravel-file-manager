@@ -43,7 +43,7 @@ class ImageService implements ImageServiceInterface
 
     protected array $filters;
 
-    protected array $builderOption;
+    protected array $builderOption = [];
 
     protected string $outputFilename;
 
@@ -205,7 +205,7 @@ class ImageService implements ImageServiceInterface
             $outputFilename = "$outputFilename-$suffix";
         }
 
-        $extension = $this->format->fileExtensions()[0]->value;
+        $extension = Arr::first($this->format->fileExtensions())->value;
         $this->outputFilename = "$outputFilename.$extension";
 
         return $this;

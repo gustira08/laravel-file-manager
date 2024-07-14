@@ -2,11 +2,13 @@
 
 namespace Koderak\FileManager;
 
+use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Koderak\FileManager\Enums\FileCategory;
 use Koderak\FileManager\Traits\FileProcessing;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Koderak\FileManager\Interfaces\ImageServiceInterface;
 use Koderak\FileManager\Interfaces\FileProcessingInterface;
 use Koderak\FileManager\Interfaces\DirectoryProcessingInterface;
 
@@ -37,12 +39,16 @@ class FileManager implements FileProcessingInterface, DirectoryProcessingInterfa
     protected FileCategory $category;
 
     // Service for creating image or thumbnail
-    protected $imageService;
+    protected ImageServiceInterface $imageService;
+
+    protected array $thumbSizes;
 
 
-    public function __construct(array $config)
+    public function __construct(array $config, $imageService)
     {
         $this->setClassProperties($config);
+        $this->setImageService($imageService);
+
     }
 
     public function setDisk(string $disk) : self
@@ -66,6 +72,17 @@ class FileManager implements FileProcessingInterface, DirectoryProcessingInterfa
         return $this;
     }
 
+    public function setImageService(ImageServiceInterface $imageService): bool
+    {
+        if ($imageService instanceof ImageServiceInterface) {
+            $this->imageService = $imageService;
+
+            return true;
+        }
+
+        throw new Exception("Image service must be instaceof ImageServiceInterface");
+    }
+
     protected function storage() : Filesystem
     {
         return Storage::disk($this->disk);
@@ -83,6 +100,10 @@ class FileManager implements FileProcessingInterface, DirectoryProcessingInterfa
 
         if (Arr::has($config, 'visibility')) {
             $this->setVisibility($config['visibility']);
+        }
+
+        if (Arr::has($config, 'thumbnails-preset')) {
+            $this->thumbSizes = $config['thumbnails-preset'];
         }
 
         if (Arr::has($config, 'allowed_file_types')) {

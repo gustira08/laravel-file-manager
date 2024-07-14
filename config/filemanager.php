@@ -7,6 +7,12 @@ return [
 
     'visibility' => 'public',
 
+    'thumbnails-preset' => [
+        ['filter' => 'smartcrop', 'size' => '500x500', 'prefix' => 'thumbs', 'suffix' => '500x500'],
+        ['filter' => 'smartcrop', 'size' => '300x300', 'prefix' => 'thumbs', 'suffix' => '300x300'],
+        ['filter' => 'smartcrop', 'size' => '150x150', 'prefix' => 'thumbs', 'suffix' => '150x150'],
+    ],
+
     'allowed_file_types' => [
         'image' => ['image/jpeg', 'image/jpg', 'image/webp', 'image/gif', 'image/png', 'image/avif', 'image/bmp', 'image/heic'],
         'video' => ['application/mp4', 'video/mp4', 'video/mpeg'],
@@ -43,7 +49,7 @@ return [
          * Leave it to null to keep the original format for output
          * file after processing.
          */
-        'encoder' => \Intervention\Image\Encoders\JpegEncoder::class,
+        'encoder' => \Intervention\Image\Encoders\WebpEncoder::class,
 
         /**
          * Destionation disk for storing new image
