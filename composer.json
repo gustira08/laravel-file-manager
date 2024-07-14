@@ -1,0 +1,39 @@
+{
+    "name": "koderak/laravel-file-manager",
+    "description": "File manager for laravel base application",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Koderak\\FileManager\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Koderak\\FileManager\\Test\\": "tests/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ary Gustira",
+            "email": "gustiitech@gmail.com"
+        }
+    ],
+    "require": {
+        "intervention/image-laravel": "^1.3"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Koderak\\FileManager\\FileManagerServiceProvider"
+            ],
+            "aliases": {
+                "FileManager": "Koderak\\FileManager\\Facades\\FileManager"
+            }
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.1"
+    }
+}
